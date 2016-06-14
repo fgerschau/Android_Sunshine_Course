@@ -93,9 +93,9 @@ public class ForecastFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                String detailWeather = listView.getItemAtPosition(position).toString();
+                String forecast = mForecastAdapter.getItem(position);
                 int duration = Toast.LENGTH_SHORT;
-                Toast toast =  Toast.makeText(getContext(),detailWeather,duration);
+                Toast toast =  Toast.makeText(getContext(),forecast,duration);
                 toast.show();
             }
         });
