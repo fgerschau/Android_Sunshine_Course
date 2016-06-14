@@ -61,11 +61,7 @@ public class ForecastFragment extends Fragment {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_refresh) {
-            FetchWeatherTask task = new FetchWeatherTask();
-            task.execute("94043,USA");
-            return true;
-        }else if ( id == R.id.action_settings){
+        if ( id == R.id.action_settings){
             Intent intent= new Intent(getActivity(),SettingsActivity.class);
             startActivity(intent);
         }
