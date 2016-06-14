@@ -139,7 +139,7 @@ public class ForecastFragment extends Fragment {
             // These are the names of the JSON objects that need to be extracted.
             final String OWM_LIST = "list";
             final String OWM_WEATHER = "weather";
-            final String OWM_TEMPERATURE = "temp";
+            final String OWM_TEMPERATURE = "main";
             final String OWM_MAX = "temp_max";
             final String OWM_MIN = "temp_min";
             final String OWM_DESCRIPTION = "main";
@@ -188,17 +188,19 @@ public class ForecastFragment extends Fragment {
                 JSONObject weatherObject = new JSONObject();
                 if(dayForecast.has(OWM_WEATHER))
                     weatherObject = dayForecast.getJSONArray(OWM_WEATHER).getJSONObject(0);
-
                 if(weatherObject.has(OWM_DESCRIPTION))
                     description = weatherObject.getString(OWM_DESCRIPTION);
 
                 // Temperatures are in a child object called "temp".  Try not to name variables
                 // "temp" when working with temperature.  It confuses everybody.
                 JSONObject temperatureObject = new JSONObject();
+                Log.v(LOG_TAG,"dayForecast: "+dayForecast.toString());
                 if(dayForecast.has(OWM_TEMPERATURE))
                     temperatureObject = dayForecast.getJSONObject(OWM_TEMPERATURE);
+
                 double high = 0.0;
                 double low = 0.0;
+                Log.v(LOG_TAG,"temperatureObject: "+temperatureObject.toString());
                 if(temperatureObject.has(OWM_MAX)&&temperatureObject.has(OWM_MIN)) {
                     high = temperatureObject.getDouble(OWM_MAX);
                     low = temperatureObject.getDouble(OWM_MIN);
