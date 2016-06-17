@@ -32,6 +32,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+import static com.gerschau.felix.sunshine.MainActivity.LOG_TAG;
 import static com.gerschau.felix.sunshine.R.string.pref_units_metric;
 
 /**
@@ -59,6 +60,19 @@ public class ForecastFragment extends Fragment {
         task.execute(location);
     }
 
+    private void openPreferredLocationInMap(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String location = sharedPreferences.getString(getString(R.string.pref_location_key),getString(R.string.pref_location_default));
+        Uri geoLocation = Uri.parse("geo:0,0?").buildUpon().appendQueryParameter("q",location).build();
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(geoLocation);
+        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+            startActivity(intent);
+        }else{
+            Log.d(LOG_TAG,"Couldn't call "+location);
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +84,7 @@ public class ForecastFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.forecastfragment, menu);
         inflater.inflate(R.menu.main,menu);
+
     }
 
     @Override
@@ -81,9 +96,8 @@ public class ForecastFragment extends Fragment {
         if (id == R.id.action_refresh) {
             updateWeather();
             return true;
-        }else if ( id == R.id.action_settings){
-            Intent intent= new Intent(getActivity(),SettingsActivity.class);
-            startActivity(intent);
+        }else if(id==R.id.action_map){
+            openPreferredLocationInMap();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -93,7 +107,7 @@ public class ForecastFragment extends Fragment {
         //th.execute();
         updateWeather();
         rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        mForecastAdapter = new ArrayAdapter<String>(getActivity(),R.layout.list_item_forecast,R.id.list_item_forecast_textview,new ArrayList<String>());
+        mForecastAdapter = new ArrayAdapter<>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_textview, new ArrayList<String>());
         final ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(mForecastAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
